@@ -1,5 +1,7 @@
 package net.tropicraft.core.common.data;
 
+import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.block.Block;
 import net.minecraft.block.FlowerBlock;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
@@ -86,29 +88,29 @@ public class TropicraftItemTagsProvider extends ItemTagsProvider {
         appendToTag(ItemTags.MUSIC_DISCS, MUSIC_DISCS);
 
         // Copy block tags
-        copy(TropicraftTags.Blocks.SAND, SAND);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.SAND, SAND, ItemTags.SAND);  // IDK know about that
         copy(TropicraftTags.Blocks.MUD, MUD);
 
-        copy(TropicraftTags.Blocks.SAPLINGS, SAPLINGS);
-        copy(TropicraftTags.Blocks.LEAVES, LEAVES);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.SAPLINGS, SAPLINGS, ItemTags.SAPLINGS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.LEAVES, LEAVES, ItemTags.LEAVES);
         
-        copy(TropicraftTags.Blocks.SMALL_FLOWERS, SMALL_FLOWERS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.SMALL_FLOWERS, SMALL_FLOWERS, ItemTags.SMALL_FLOWERS);
 
-        copy(TropicraftTags.Blocks.LOGS, LOGS);
-        copy(TropicraftTags.Blocks.PLANKS, PLANKS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.LOGS, LOGS, ItemTags.LOGS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.PLANKS, PLANKS, ItemTags.PLANKS);
+
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.WOODEN_SLABS, WOODEN_SLABS, ItemTags.WOODEN_SLABS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.WOODEN_STAIRS, WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.WOODEN_DOORS, WOODEN_DOORS, ItemTags.WOODEN_DOORS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.WOODEN_TRAPDOORS, WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.WOODEN_FENCES, WOODEN_FENCES, ItemTags.WOODEN_FENCES);
         
-        copy(TropicraftTags.Blocks.WOODEN_SLABS, WOODEN_SLABS);
-        copy(TropicraftTags.Blocks.WOODEN_STAIRS, WOODEN_STAIRS);
-        copy(TropicraftTags.Blocks.WOODEN_DOORS, WOODEN_DOORS);
-        copy(TropicraftTags.Blocks.WOODEN_TRAPDOORS, WOODEN_TRAPDOORS);
-        copy(TropicraftTags.Blocks.WOODEN_FENCES, WOODEN_FENCES);
-        
-        copy(TropicraftTags.Blocks.SLABS, SLABS);
-        copy(TropicraftTags.Blocks.STAIRS, STAIRS);
-        copy(TropicraftTags.Blocks.DOORS, DOORS);
-        copy(TropicraftTags.Blocks.TRAPDOORS, TRAPDOORS);
-        copy(TropicraftTags.Blocks.FENCES, FENCES);
-        copy(TropicraftTags.Blocks.WALLS, WALLS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.SLABS, SLABS, ItemTags.SLABS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.STAIRS, STAIRS, ItemTags.STAIRS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.DOORS, DOORS, ItemTags.DOORS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.TRAPDOORS, TRAPDOORS, ItemTags.TRAPDOORS);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.FENCES, FENCES, ItemTags.FENCES);
+        copyBlockAndAppendToTag(TropicraftTags.Blocks.WALLS, WALLS, ItemTags.WALLS);
     }
 
     @SafeVarargs
@@ -119,10 +121,15 @@ public class TropicraftItemTagsProvider extends ItemTagsProvider {
     private void addItemsToTag(INamedTag<Item> tag, IItemProvider... items) {
         getOrCreateBuilder(tag).add(Arrays.stream(items).map(IItemProvider::asItem).toArray(Item[]::new));
     }
-    
+
     @SafeVarargs
     private final void appendToTag(INamedTag<Item> tag, INamedTag<Item>... toAppend) {
         getOrCreateBuilder(tag).addTags(toAppend);
+    }
+
+    private void copyBlockAndAppendToTag(INamedTag<Block> blockTag, INamedTag<Item> itemTag, INamedTag<Item> toAddTo) {
+        copy(blockTag, itemTag);
+        appendToTag(toAddTo, itemTag);
     }
 
     @Override
